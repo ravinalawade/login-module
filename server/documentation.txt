@@ -1,0 +1,18 @@
+
+To login:
+post a request to url:
+http://localhost:3000/api/login
+with body in which parameters are
+{"phone_no":""}
+
+To get otp link when forgot password:
+post a request to url:
+http://localhost:3000/api/otpverify
+with body in which parameters are
+{"phone_no":"","code":""}
+
+To signup:
+post a request to the url :
+http://localhost:3000/api/register
+with body in which parameters are
+{"name":"","email":"","phone_no":"","age":Num,"country":"","city":"","profession":""}
