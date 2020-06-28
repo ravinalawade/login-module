@@ -1,4 +1,4 @@
-// require('./config/config');
+require('./config/config');
 require('./models/db');
 // require('./config/passportConfig');
 
@@ -6,6 +6,7 @@ const express = require('express');
 const session = require('express-session')
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const port=process.env.PORT
 // const passport = require('passport');
 
 const rtsIndex = require('./routes/indexrouter');
@@ -34,4 +35,4 @@ app.use((err, req, res, next) => {
 });
 
 // start server
-app.listen(process.env.PORT, () => console.log(`Server started at port : ${process.env.PORT}`));
+app.listen(port, () => console.log(`Server started at port : ${port}`));
