@@ -4,7 +4,7 @@
         "MONGODB_URI": "mongodb+srv://ravi:Acbl%40123@login-database-g3jv1.mongodb.net/login-data?retryWrites=true&w=majority"
     },
     "production": {
-        "PORT": 4200,
+        "PORT": 5000,
         "MONGODB_URI": "mongodb+srv://ravi:Acbl%40123@login-database-g3jv1.mongodb.net/login-data?retryWrites=true&w=majority"
     }
 }
