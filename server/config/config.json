@@ -1,6 +1,6 @@
 {
     "development": {
-        "PORT": 3000,
+        "PORT": 80,
         "MONGODB_URI": "mongodb+srv://ravi:Acbl%40123@login-database-g3jv1.mongodb.net/login-data?retryWrites=true&w=majority"
     },
     "production": {
