@@ -19,7 +19,8 @@ const Visit = mongoose.model('Visit');
 //   });
 
 module.exports.register = (req, res, next) => {
-    var sn=req.session
+    // var sn=req.session
+    
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
@@ -28,11 +29,15 @@ module.exports.register = (req, res, next) => {
     user.country = req.body.country;
     user.city = req.body.city;
     user.profession = req.body.profession;
-    sn.name=user.name
-    sn.phone_no=user.phone_no
+    // sn.name=user.name
+    // sn.phone_no=user.phone_no
+    // console.log(user)
     user.save((err, doc) => {
         if (!err)
+        {
+            console.log("saving")
             res.send(doc);
+        }
         else {
             if (err.code == 11000)
                 res.status(422).send(['Duplicate email adrress found.']);

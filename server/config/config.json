@@ -1,7 +1,7 @@
 {
     "development": {
         "PORT": 3000,
-        "MONGODB_URI": "mongodb://localhost:27017/msp"
+        "MONGODB_URI": "mongodb+srv://ravi:Acbl%40123@login-database-g3jv1.mongodb.net/login-data?retryWrites=true&w=majority"
     },
     "production": {
         "PORT": 80,
