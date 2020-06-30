@@ -12,6 +12,12 @@ const port=process.env.PORT
 const rtsIndex = require('./routes/indexrouter');
 
 var app = express();
+app.set('view engine', 'ejs');
+
+//frontend urls
+app.get('/', (req, res)=>{ 
+    res.render('login'); 
+    }); 
 
 // middleware
 app.use(bodyParser.json());
