@@ -3,7 +3,7 @@ const request =require('request');
 const session =require('express-session')
 // var nodemailer = require('nodemailer');
 var async=require('async');
-const { render } = require('ejs');
+const flash = require('connect-flash');
 // var crypto =require('crypto');
 // const passport = require('passport');
 // const _ = require('lodash');
@@ -25,7 +25,7 @@ module.exports.register = (req, res, next) => {
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
-    user.phone_no = "+91"+req.body.phone_no;
+    user.phone_no = req.body.phone_no;
     user.age = req.body.age;
     user.country = req.body.country;
     user.city = req.body.city;
@@ -37,17 +37,19 @@ module.exports.register = (req, res, next) => {
         if (!err)
         {
             console.log("saving")
-            res.send({flag:1});
+            res.send(doc);
         }
         else {
             if (err.code == 11000)
-                res.status(422).send({flag:err});
+                res.status(422).send(['Duplicate email adrress found.']);
             else
                 return next(err);
         }
 
     });
 }
+
+
 
 module.exports.login=(req,res,next)=>{
     var flag=1
@@ -61,10 +63,11 @@ module.exports.login=(req,res,next)=>{
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
-                'phone': "+91"+req.body.phone_no,
+                'phone': '+91 ' + req.body.phone_no,
                 'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62'
               }
             };
+			console.log(options['form']['phone']);
             request(options, function (error, response) {
               if (error) throw new Error(error);
               console.log(response.body,"pass")
@@ -87,17 +90,27 @@ module.exports.login=(req,res,next)=>{
       else
       {
         var ssn=req.session
-        ssn.phone_no="+91"+req.body.phone_no
+        ssn.phone_no='+91 ' + req.body.phone_no
         done(null)
       }
       // console.log(ans,3)
       
     },
+
       ], function() {
         console.log("return")
+		if (flag == 1) {
+			req.flash('error', 'Please Enter Valid Phone Number');
+			res.redirect('/login');
+		} else {
+			req.flash('success', 'otp send please check your messages');
+			res.redirect('/otpverify');
+		}
         return res.status(200).json({status:flag})
       })
 };
+
+
 
 module.exports.otpverify=(req,res,next)=>{
   var ssn=req.session;
@@ -171,6 +184,7 @@ module.exports.otpverify=(req,res,next)=>{
   })
 }
 
+
 module.exports.visit = (req, res, next) => {
   var ssn=req.session
   console.log(ssn)
@@ -193,11 +207,6 @@ module.exports.visit = (req, res, next) => {
       }
 
   });
-}
-
-module.exports.booth_info=(req,res,next)=>{
-  // console.log("booth info")
-  res.render('booth'); 
 }
 
 //Email
