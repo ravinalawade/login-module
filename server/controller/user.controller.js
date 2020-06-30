@@ -63,7 +63,7 @@ module.exports.login=(req,res,next)=>{
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
-                'phone': '+91 ' + req.body.phone_no,
+                'phone': '+91' + req.body.phone_no,
                 'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62'
               }
             };
@@ -90,7 +90,7 @@ module.exports.login=(req,res,next)=>{
       else
       {
         var ssn=req.session
-        ssn.phone_no='+91 ' + req.body.phone_no
+        ssn.phone_no='+91' + req.body.phone_no
         done(null)
       }
       // console.log(ans,3)
