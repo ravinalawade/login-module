@@ -3,6 +3,7 @@ const request =require('request');
 const session =require('express-session')
 // var nodemailer = require('nodemailer');
 var async=require('async');
+const { render } = require('ejs');
 // var crypto =require('crypto');
 // const passport = require('passport');
 // const _ = require('lodash');
@@ -24,7 +25,7 @@ module.exports.register = (req, res, next) => {
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
-    user.phone_no = req.body.phone_no;
+    user.phone_no = "+91"+req.body.phone_no;
     user.age = req.body.age;
     user.country = req.body.country;
     user.city = req.body.city;
@@ -36,11 +37,11 @@ module.exports.register = (req, res, next) => {
         if (!err)
         {
             console.log("saving")
-            res.send(doc);
+            res.send({flag:1});
         }
         else {
             if (err.code == 11000)
-                res.status(422).send(['Duplicate email adrress found.']);
+                res.status(422).send({flag:err});
             else
                 return next(err);
         }
@@ -49,32 +50,8 @@ module.exports.register = (req, res, next) => {
 }
 
 module.exports.login=(req,res,next)=>{
-    // var email=req.body.email;
-    // var phone_no=req.body.phone_no;
-    // User.findOne({phone_no:phone_no},
-    //     (err,user)=>{
-    //         if (!user)
-    //             return res.status(200).json({ status: false });
-    //         else
-    //             return res.status(200).json({ status: true, user : user });
-    //     }
-    // );
     var flag=1
     async.waterfall([
-        // function(done) {
-        //   User.findOne({
-        //     phone_no: req.body.phone_no
-        //   }).exec(function(err, user) {
-        //     if (user) {
-        //       flag=1
-        //       done(err, user);
-        //     } else {
-        //       console.log(req.body.phone_no)
-        //       flag=0
-        //       done(err,user)
-        //     }
-        //   });
-        // },
         function(done) {
               // console.log(user)
             var options = {
@@ -84,7 +61,7 @@ module.exports.login=(req,res,next)=>{
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
-                'phone': req.body.phone_no,
+                'phone': "+91"+req.body.phone_no,
                 'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62'
               }
             };
@@ -107,27 +84,15 @@ module.exports.login=(req,res,next)=>{
       {
         flag=0
       }
+      else
+      {
+        var ssn=req.session
+        ssn.phone_no="+91"+req.body.phone_no
+        done(null)
+      }
       // console.log(ans,3)
-      done(null)
+      
     },
-    // function(done) {
-    //   if(flag!=2){
-    //     User.findOne({
-    //       phone_no: req.body.phone_no
-    //     }).exec(function(err, user) {
-    //       if (user) {
-    //         flag=1
-    //         done(null);
-    //       } else {
-    //         console.log(req.body.phone_no)
-    //         flag=0
-    //         done(null)
-    //       }
-    //     });
-    //   }
-    //   else
-    //   done(null)
-    // }
       ], function() {
         console.log("return")
         return res.status(200).json({status:flag})
@@ -136,23 +101,12 @@ module.exports.login=(req,res,next)=>{
 
 module.exports.otpverify=(req,res,next)=>{
   var ssn=req.session;
-  var user_response=1
+  var flag=1
   console.log("in function",req.body.phone_no)
   async.waterfall([
     function(done) {
-      User.findOne({
-        phone_no: req.body.phone_no
-      }).exec(function(err, user) {
-        if (user) {
-          done(err, user);
-        } else {
-          user_response=0
-          done(err,user)
-        }
-      });
-    },
-    function(user, done) {
-      if(user_response){
+      var ans
+      if(flag){
         console.log("otp verifying")
         var options = {
           'method': 'POST',
@@ -161,43 +115,59 @@ module.exports.otpverify=(req,res,next)=>{
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           form: {
-            'phone': req.body.phone_no,
+            'phone': ssn.phone_no,
             'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62',
             'code': req.body.code
           }
         };
-        var flag=request(options, function (error, response) {
+        var temp=request(options, function (error, response) {
           if (error) throw new Error(error);
-          var ans=response.body
+          ans=response.body
           console.log(response.body);
-          done(error,ans,user)
+          done(error,ans)
         });
       }
-      else{
-        console.log("user not found")
-        done(null,user_response,0)
-      }
+      // done(null,ans,user)
       // console.log(user,ans)
       // done(ans)
     },
-    function(ans,user,done){
+    function(ans,done){
       console.log("parse")
       ans=JSON.parse(ans)
       if (ans){
         if(ans.status=="SUCCESS"){
-          user_response=user
-          ssn.phone_no=user.phone_no
-          ssn.name=user.name
-          console.log(ssn)
+          flag=2
         }
         else{
-          user_response=0
+          flag=0
         }
       }
       done(null)
+    },
+    function(done) {
+      if (flag)
+      {
+        User.findOne({
+          phone_no: ssn.phone_no
+        }).exec(function(err, user) {
+          if (user) {
+            flag=1
+            ssn.name=user.name
+            console.log(ssn)
+            done(null);
+          }
+          else{
+
+            done(null)
+          }
+        });
+      } 
+      else
+      done(null)
     }
+    
   ], function(err) {
-    return res.status(422).json({status:user_response});
+    return res.status(422).json({status:flag});
   })
 }
 
@@ -223,6 +193,11 @@ module.exports.visit = (req, res, next) => {
       }
 
   });
+}
+
+module.exports.booth_info=(req,res,next)=>{
+  // console.log("booth info")
+  res.render('booth'); 
 }
 
 //Email
