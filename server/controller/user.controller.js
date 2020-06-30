@@ -99,13 +99,13 @@ module.exports.login=(req,res,next)=>{
 
       ], function() {
         console.log("return")
-		if (flag == 1) {
-			req.flash('error', 'Please Enter Valid Phone Number');
-			res.redirect('/login');
-		} else {
-			req.flash('success', 'otp send please check your messages');
-			res.redirect('/otpverify');
-		}
+		// if (flag == 1) {
+		// 	// req.flash('error', 'Please Enter Valid Phone Number');
+		// 	res.redirect('/login');
+		// } else {
+		// 	// req.flash('success', 'otp send please check your messages');
+		// 	res.redirect('/otpverify');
+		// }
         return res.status(200).json({status:flag})
       })
 };
