@@ -121,7 +121,7 @@ module.exports.otpverify=(req,res,next)=>{
   if (typeof ssn.phone_no!=='undefined')
   phone_no=ssn.phone_no
   else
-  phone_no=req.body.phone_no
+  phone_no='+91'+req.body.phone_no
   async.waterfall([
     function(done) {
       var ans
