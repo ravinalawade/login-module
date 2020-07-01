@@ -15,7 +15,8 @@ var userSchema = new mongoose.Schema({
     phone_no: {
         type: String,
         required: 'Phone no can\'t be empty',
-        minlength: [10, 'Password must be atleast 10 character long']
+        minlength: [10, 'Password must be atleast 10 character long'],
+        unique: true
     },
     age: {
         type: Number,

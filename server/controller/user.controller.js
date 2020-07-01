@@ -25,7 +25,7 @@ module.exports.register = (req, res, next) => {
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
-    user.phone_no = req.body.phone_no;
+    user.phone_no ='+91'+ req.body.phone_no;
     user.age = req.body.age;
     user.country = req.body.country;
     user.city = req.body.city;
