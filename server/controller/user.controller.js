@@ -194,25 +194,45 @@ module.exports.otpverify=(req,res,next)=>{
 module.exports.visit = (req, res, next) => {
   var ssn=req.session
   console.log(ssn)
-  var visit = new Visit();
-  visit.phone_no ='+91'+ req.body.phone_no
-  visit.name = req.body.name
-  visit.booth_id = req.body.booth_id;
-  visit.time_spent = req.body.time_spent;
-  visit.pic_clicks = req.body.pic_clicks;
-  visit.vid_clicks = req.body.vid_clicks;
-  visit.sim_clicks = req.body.sim_clicks;
-  visit.save((err, doc) => {
-      if (!err)
-          res.send(doc);
-      else {
-          if (err.code == 11000)
-              res.status(422).send(['Error found.']);
-          else
-              return next(err);
-      }
+  var phone_no
+  async.waterfall([
+    function(done){
+      User.findOne({
+        phone_no: '+91'+req.body.phone_no
+      }).exec(function(err, user) {
+        if (user) {
+          // flag=1
+          phone_no=user.phone_no
+          console.log(ssn)
+          done(null);
+        }
+        else{
+          done(null)
+        }
+      });
+    }
+  ],function(err){
+    var visit = new Visit();
+    visit.phone_no ='+91'+ req.body.phone_no
+    visit.name = req.body.name
+    visit.booth_id = req.body.booth_id;
+    visit.time_spent = req.body.time_spent;
+    visit.pic_clicks = req.body.pic_clicks;
+    visit.vid_clicks = req.body.vid_clicks;
+    visit.sim_clicks = req.body.sim_clicks;
+    visit.save((err, doc) => {
+        if (!err)
+            res.send(doc);
+        else {
+            if (err.code == 11000)
+                res.status(422).send(['Error found.']);
+            else
+                return next(err);
+        }
 
-  });
+    });
+  })
+  
 }
 
 //Email
