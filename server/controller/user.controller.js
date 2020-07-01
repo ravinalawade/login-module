@@ -114,6 +114,7 @@ module.exports.login=(req,res,next)=>{
 
 module.exports.otpverify=(req,res,next)=>{
   var ssn=req.session;
+  console.log(ssn,req.body)
   var flag=1
   console.log("in function",req.body.phone_no)
   async.waterfall([
