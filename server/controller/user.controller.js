@@ -194,7 +194,7 @@ module.exports.otpverify=(req,res,next)=>{
 module.exports.visit = (req, res, next) => {
   var ssn=req.session
   console.log(ssn)
-  var phone_no
+  var name
   async.waterfall([
     function(done){
       User.findOne({
@@ -202,7 +202,7 @@ module.exports.visit = (req, res, next) => {
       }).exec(function(err, user) {
         if (user) {
           // flag=1
-          phone_no=user.phone_no
+          name=user.name
           console.log(ssn)
           done(null);
         }
@@ -214,7 +214,7 @@ module.exports.visit = (req, res, next) => {
   ],function(err){
     var visit = new Visit();
     visit.phone_no ='+91'+ req.body.phone_no
-    visit.name = req.body.name
+    visit.name = name
     visit.booth_id = req.body.booth_id;
     visit.time_spent = req.body.time_spent;
     visit.pic_clicks = req.body.pic_clicks;
