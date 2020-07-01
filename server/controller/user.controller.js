@@ -195,7 +195,7 @@ module.exports.visit = (req, res, next) => {
   var ssn=req.session
   console.log(ssn)
   var visit = new Visit();
-  visit.phone_no = req.body.phone_no
+  visit.phone_no ='+91'+ req.body.phone_no
   visit.name = req.body.name
   visit.booth_id = req.body.booth_id;
   visit.time_spent = req.body.time_spent;
