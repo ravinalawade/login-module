@@ -117,6 +117,11 @@ module.exports.otpverify=(req,res,next)=>{
   console.log(ssn,req.body)
   var flag=1
   console.log("in function",req.body.phone_no)
+  var phone_no
+  if (typeof ssn.phone_no!=='undefined')
+  phone_no=ssn.phone_no
+  else
+  phone_no=req.body.phone_no
   async.waterfall([
     function(done) {
       var ans
@@ -129,7 +134,7 @@ module.exports.otpverify=(req,res,next)=>{
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           form: {
-            'phone': ssn.phone_no,
+            'phone': phone_no,
             'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62',
             'code': req.body.code
           }
@@ -162,7 +167,7 @@ module.exports.otpverify=(req,res,next)=>{
       if (flag)
       {
         User.findOne({
-          phone_no: ssn.phone_no
+          phone_no: phone_no
         }).exec(function(err, user) {
           if (user) {
             flag=1
