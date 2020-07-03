@@ -10,6 +10,7 @@ const flash = require('connect-flash');
 
 const User = mongoose.model('User');
 const Visit = mongoose.model('Visit');
+const Feedback = mongoose.model('Feedback')
 
 // var transporter = nodemailer.createTransport({
 //     service: 'gmail',
@@ -233,6 +234,33 @@ module.exports.visit = (req, res, next) => {
     });
   })
   
+}
+
+module.exports.feedback = (req, res, next) => {
+  // var sn=req.session
+  
+  var feed = new Feedback();
+  feed.phone_no ='+91'+ req.body.phone_no;
+  feed.booth_id = req.body.booth_id;
+  feed.feedback = req.body.feedback;
+  
+  // sn.name=user.name
+  // sn.phone_no=user.phone_no
+  // console.log(user)
+  feed.save((err, doc) => {
+      if (!err)
+      {
+          console.log("saving")
+          res.send({flag:1});
+      }
+      else {
+          if (err.code == 11000)
+              res.status(422).send({flag:0});
+          else
+              return next(err);
+      }
+
+  });
 }
 
 //Email
