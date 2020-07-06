@@ -14,6 +14,7 @@ const port=process.env.PORT
 const rtsIndex = require('./routes/indexrouter');
 const User = mongoose.model('User');
 const Visit = mongoose.model('Visit');
+const Feedback = mongoose.model('Feedback')
 
 var app = express();
 app.set('view engine', 'ejs');
@@ -67,6 +68,16 @@ app.get('/dashboard_v/:id', (req, res)=> {
 			console.log('Something went wrong');
 		} else {
 			res.render('dashboard_v', {visits: visits, id: req.params.id});
+		}
+	});
+});
+
+app.get('/dashboard_v/:id/feedback', (req, res)=> {
+	Feedback.find({'booth_id': req.params.id}, function(err, feedbacks) {
+		if (err) {
+			console.log('Something went wrong');
+		} else {
+			res.render('feedback', {feedbacks: feedbacks, id: req.params.id});
 		}
 	});
 });
