@@ -9,6 +9,7 @@ router.post('/register', ctrlUser.register);
 router.post('/login', ctrlUser.login);
 router.post('/otpverify',ctrlUser.otpverify);
 router.post('/visit',ctrlUser.visit);
+router.post('/feedback',ctrlUser.feedback);
 
 //frontend urls
 // router.get('/booth_info',ctrlUser.booth_info);
