@@ -87,6 +87,7 @@ module.exports.login=(req,res,next)=>{
       if (ans.status!="SUCCESS")
       {
         flag=0
+        done(null)
       }
       else
       {
