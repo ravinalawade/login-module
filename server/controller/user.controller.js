@@ -59,13 +59,13 @@ module.exports.login=(req,res,next)=>{
               // console.log(user)
             var options = {
               'method': 'POST',
-              'url': 'https://api.ringcaptcha.com/ihaqepa2e6u1egyjyqad/code/sms',
+              'url': 'https://api.ringcaptcha.com/2ufe8a1osy2umo7imu2a/code/sms',
               'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
                 'phone': '+91' + req.body.phone_no,
-                'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62'
+                'api_key': 'd4a31a175c6091c98eb16353296805b6d3e5bd49'
               }
             };
 			console.log(options['form']['phone']);
@@ -131,13 +131,13 @@ module.exports.otpverify=(req,res,next)=>{
         console.log("otp verifying")
         var options = {
           'method': 'POST',
-          'url': 'https://api.ringcaptcha.com/ihaqepa2e6u1egyjyqad/verify',
+          'url': 'https://api.ringcaptcha.com/2ufe8a1osy2umo7imu2a/verify',
           'headers': {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           form: {
             'phone': phone_no,
-            'api_key': 'b567f79b865e052c355516c435a3d82804f6ee62',
+            'api_key': 'd4a31a175c6091c98eb16353296805b6d3e5bd49',
             'code': req.body.code
           }
         };
