@@ -10,6 +10,7 @@ router.post('/login', ctrlUser.login);
 router.post('/otpverify',ctrlUser.otpverify);
 router.post('/visit',ctrlUser.visit);
 router.post('/feedback',ctrlUser.feedback);
+router.post('/feedback_expo',ctrlUser.feedback_expo);
 
 //frontend urls
 // router.get('/booth_info',ctrlUser.booth_info);

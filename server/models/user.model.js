@@ -99,6 +99,17 @@ var feedback=mongoose.Schema({
     }
 })
 
+var feedback_expo=mongoose.Schema({
+    phone_no: {
+        type: String,
+        required: 'Phone no can\'t be empty',
+        minlength: [10, 'Password must be atleast 10 character long']
+    },
+    feedback:{
+        type:String,
+        required:"feedback cant be empty"
+    }
+})
 // Custom validation for email
 userSchema.path('email').validate((val) => {
     emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -108,3 +119,4 @@ userSchema.path('email').validate((val) => {
 mongoose.model('User', userSchema);
 mongoose.model('Visit', visit);
 mongoose.model('Feedback', feedback);
+mongoose.model('Feedback_expo', feedback_expo);
