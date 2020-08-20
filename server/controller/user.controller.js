@@ -60,13 +60,13 @@ module.exports.login=(req,res,next)=>{
               // console.log(user)
             var options = {
               'method': 'POST',
-              'url': 'https://api.ringcaptcha.com/2ufe8a1osy2umo7imu2a/code/sms',
+              'url': 'https://api.smsgateway.pw:8088/api/sendotp',
               'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
-                'phone': '+91' + req.body.phone_no,
-                'api_key': 'd4a31a175c6091c98eb16353296805b6d3e5bd49'
+                'phone': req.body.phone_no,
+                
               }
             };
 			console.log(options['form']['phone']);
@@ -85,15 +85,15 @@ module.exports.login=(req,res,next)=>{
     },
     function(ans,done){
       console.log(ans)
-      if (ans.status!="SUCCESS")
+      if (ans.success!=true)
       {
         flag=0
         done(null)
       }
       else
       {
-        var ssn=req.session
-        ssn.phone_no='+91' + req.body.phone_no
+        // var ssn=req.session
+        // ssn.phone_no='+91' + req.body.phone_no
         done(null)
       }
       // console.log(ans,3)
@@ -113,17 +113,77 @@ module.exports.login=(req,res,next)=>{
       })
 };
 
+module.exports.resend=(req,res,next)=>{
+  var flag=1
+  async.waterfall([
+      function(done) {
+            // console.log(user)
+          var options = {
+            'method': 'POST',
+            'url': 'https://api.smsgateway.pw:8088/api/resendotp',
+            'headers': {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            form: {
+              'phone': req.body.phone_no,
+              
+            }
+          };
+    console.log(options['form']['phone']);
+          request(options, function (error, response) {
+            if (error) throw new Error(error);
+            console.log(response.body,"pass")
+            done(null,response.body)    //pass the response
+            // res=JSON.parse(response.body)
+          });
+        
+  },
+  function(response,done){
+    // console.log(response,2)
+    var ans=JSON.parse(response)
+    done(null,ans) //pass json object
+  },
+  function(ans,done){
+    console.log(ans)
+    if (ans.success!=true)
+    {
+      flag=0
+      done(null)
+    }
+    else
+    {
+      // var ssn=req.session
+      // ssn.phone_no='+91' + req.body.phone_no
+      done(null)
+    }
+    // console.log(ans,3)
+    
+  },
+
+    ], function() {
+      console.log("return")
+  // if (flag == 1) {
+  // 	// req.flash('error', 'Please Enter Valid Phone Number');
+  // 	res.redirect('/login');
+  // } else {
+  // 	// req.flash('success', 'otp send please check your messages');
+  // 	res.redirect('/otpverify');
+  // }
+      return res.status(200).json({status:flag})
+    })
+};
+
 
 
 module.exports.otpverify=(req,res,next)=>{
-  var ssn=req.session;
-  console.log(ssn,req.body)
+  // var ssn=req.session;
+  // console.log(ssn,req.body)
   var flag=1
   console.log("in function",req.body.phone_no)
   var phone_no
-  if (typeof ssn.phone_no!=='undefined')
-  phone_no=ssn.phone_no
-  else
+  // if (typeof ssn.phone_no!=='undefined')
+  // phone_no=ssn.phone_no
+  // else
   phone_no='+91'+req.body.phone_no
   async.waterfall([
     function(done) {
@@ -132,14 +192,13 @@ module.exports.otpverify=(req,res,next)=>{
         console.log("otp verifying")
         var options = {
           'method': 'POST',
-          'url': 'https://api.ringcaptcha.com/2ufe8a1osy2umo7imu2a/verify',
+          'url': 'https://api.smsgateway.pw:8088/api/verifyotp',
           'headers': {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
           form: {
-            'phone': phone_no,
-            'api_key': 'd4a31a175c6091c98eb16353296805b6d3e5bd49',
-            'code': req.body.code
+            'phone': req.body.phone_no,
+            'otp': req.body.code
           }
         };
         var temp=request(options, function (error, response) {
@@ -157,7 +216,7 @@ module.exports.otpverify=(req,res,next)=>{
       console.log("parse")
       ans=JSON.parse(ans)
       if (ans){
-        if(ans.status=="SUCCESS"){
+        if(ans.success==true){
           flag=2
         }
         else{
@@ -174,8 +233,8 @@ module.exports.otpverify=(req,res,next)=>{
         }).exec(function(err, user) {
           if (user) {
             flag=1
-            ssn.name=user.name
-            console.log(ssn)
+            // ssn.name=user.name
+            // console.log(ssn)
             done(null);
           }
           else{
@@ -195,8 +254,8 @@ module.exports.otpverify=(req,res,next)=>{
 
 
 module.exports.visit = (req, res, next) => {
-  var ssn=req.session
-  console.log(ssn)
+  // var ssn=req.session
+  // console.log(ssn)
   var name
   async.waterfall([
     function(done){
@@ -206,7 +265,7 @@ module.exports.visit = (req, res, next) => {
         if (user) {
           // flag=1
           name=user.name
-          console.log(ssn)
+          // console.log(ssn)
           done(null);
         }
         else{

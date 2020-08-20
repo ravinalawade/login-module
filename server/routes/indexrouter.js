@@ -7,6 +7,7 @@ const ctrlUser = require('../controller/user.controller');
 
 router.post('/register', ctrlUser.register);
 router.post('/login', ctrlUser.login);
+router.post('/resend', ctrlUser.resend);
 router.post('/otpverify',ctrlUser.otpverify);
 router.post('/visit',ctrlUser.visit);
 router.post('/feedback',ctrlUser.feedback);
