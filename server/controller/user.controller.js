@@ -60,13 +60,22 @@ module.exports.login=(req,res,next)=>{
               // console.log(user)
             var options = {
               'method': 'POST',
+<<<<<<< HEAD
               'url': 'https://api.smsgateway.pw:8088/api/sendotp',
+=======
+              'url': 'https://api.ringcaptcha.com/u6iqe7ari2e9a3ozugi5/code/sms',
+>>>>>>> 1621a3a8a521b5905fa0db8db40fc400460622ee
               'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded'
               },
               form: {
+<<<<<<< HEAD
                 'phone': req.body.phone_no,
                 
+=======
+                'phone': '+91' + req.body.phone_no,
+                'api_key': 'bc15fc16ad8c44ff8d75090d1483b87f11414f91'
+>>>>>>> 1621a3a8a521b5905fa0db8db40fc400460622ee
               }
             };
 			console.log(options['form']['phone']);
