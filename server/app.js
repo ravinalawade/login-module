@@ -35,7 +35,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain)
 app.use(bodyParser.json());
-app.use(cors());
+// app.use(cors());
 // app.use(passport.initialize());
 app.use(session({secret:'ravi',
                 resave: true, 
